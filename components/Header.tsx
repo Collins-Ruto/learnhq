@@ -273,7 +273,7 @@ function Header() {
             )}
             <Link
               href={
-                user?.role === "student" ? "/page/courses" : "/page/courses"
+                user?.role === "student" ? "/learn/courses" : "/page/courses"
               }
               className={`mt-4 flex cursor-pointer items-center rounded-md p-2 align-middle text-gray-800 hover:text-blue-700 ${
                 ["/page/courses", "/student/courses"].includes(
@@ -409,7 +409,7 @@ function Header() {
               </div>
             )}
             <Link
-              href={`${user?.role || ""}/account`}
+              href={`/${user?.role ?? ""}/account`}
               className={`mt-4 flex cursor-pointer items-center rounded-md p-2 align-middle text-gray-800 hover:text-blue-700 ${
                 currentRoute === `/${user?.role || ""}/account`
                   ? "hover:text bg-blue-700 text-white hover:text-white"

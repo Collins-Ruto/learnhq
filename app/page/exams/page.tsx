@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Loader } from "~/components";
+import { Button, Loader, PdfExams } from "~/components";
 import Image from "next/image";
 import { type Result, Subjects } from "~/types/types";
 import { api } from "@/utils/api";
@@ -20,7 +20,8 @@ function Exams() {
   const { data, isLoading, error } = api.exam.getAll.useQuery(pagesCount);
   const { data: count } = api.exam.count.useQuery();
 
-  console.log("exams", exams);
+  // console.log("exams", exams);
+  // console.log("subjects", Subjects);
 
   useEffect(() => {
     if (data) {
@@ -106,6 +107,9 @@ function Exams() {
               />
               Add
             </Link>
+          </div>
+          <div className="">
+            <PdfExams />
           </div>
         </div>
       </div>

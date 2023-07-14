@@ -263,7 +263,7 @@ function Login() {
                 Username: <span className="font-semibold">23isaac</span>{" "}
               </div>
               <div className="">
-                Password: <span className="font-semibold">23isaac</span>{" "}
+                Password: <span className="font-semibold">password</span>{" "}
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ type Props = {
 };
 
 function StatusMsg({ status }: Props) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     status?.message && status?.message !== "" && setShow(true);

@@ -20,6 +20,21 @@ export const examRouter = createTRPCRouter({
     });
   }),
 
+  getAllPrint: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.exam.findMany({
+      include: {
+        student: {
+          include: {
+            stream: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+  }),
+
   count: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.exam.count();
   }),
