@@ -2,7 +2,6 @@
 
 import { api } from "@/utils/api";
 import type { Exam, Stream, Student } from "@prisma/client";
-// app.component.ts
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Subjects, grades } from "~/types/types";
 
 export default function AppComponent() {
+  // initalize JSPDF doc print landscape page 
   const doc = new jsPDF("landscape");
 
   const [exams, setExams] =
@@ -101,39 +101,18 @@ export default function AppComponent() {
       obj.push((index + 1).toString());
       finalResults.push(obj);
     });
-
-    // console.log("fres", finalResults);
     // remove empty fields created by array.push()
     return finalResults.filter((obj) => obj[3]);
   };
 
   // autoTable(doc, {
-  //   body: [
-  //     [
-  //       {
-  //         content: "Company brand",
-  //         styles: {
-  //           halign: "left",
-  //           fontSize: 20,
-  //           textColor: "#ffffff",
-  //         },
-  //       },
-  //       {
-  //         content: "Invoice",
-  //         styles: {
-  //           halign: "right",
-  //           fontSize: 20,
-  //           textColor: "#ffffff",
-  //         },
-  //       },
-  //     ],
-  //   ],
   //   theme: "plain",
   //   styles: {
   //     fillColor: "#3366ff",
   //   },
   // });
 
+  // AutoTable formating 
   autoTable(doc, {
     body: [
       [

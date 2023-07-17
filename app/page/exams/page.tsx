@@ -20,9 +20,6 @@ function Exams() {
   const { data, isLoading, error } = api.exam.getAll.useQuery(pagesCount);
   const { data: count } = api.exam.count.useQuery();
 
-  // console.log("exams", exams);
-  // console.log("subjects", Subjects);
-
   useEffect(() => {
     if (data) {
       setExams(data);
@@ -73,7 +70,6 @@ function Exams() {
             placeholder="Search student, Name, Term ..."
           />
         </div>
-
         <div className="flex justify-between gap-4">
           <div>
             {submit ? (

@@ -7,7 +7,8 @@ export default withAuth(
     function middleware(req) {
         const token = req.nextauth.token
         const role = token?.role as string
-        console.log("middleware token : ", token);
+        console.log("middleware : ", token);
+        console.log("middl req : ", req.nextauth);
         console.log("middleware path : ", req.nextUrl.pathname);
 
         if (req.nextUrl.pathname.startsWith("/admin") && token?.role !== "admin")
@@ -41,7 +42,7 @@ export default withAuth(
     {
         callbacks: {
             authorized: ({ token }) => {
-                console.log("authorized token : ", token);
+                // console.log("authorized token : ", token);
                 return !!token
             },
         },
@@ -49,6 +50,6 @@ export default withAuth(
 );
 
 export const config = {
-    matcher: ["/", "/admin/:path*", "/student/:path*", "/teacher/:path*", "/page/:path*"],
+    matcher: [ "/", "/admin/:path*", "/student/:path*", "/teacher/:path*", "/page/:path*"],
 };
 

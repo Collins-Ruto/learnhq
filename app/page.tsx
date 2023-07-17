@@ -6,6 +6,7 @@ import { authOptions } from "@/server/auth";
 import type { User } from "@prisma/client";
 import Head from "next/head";
 
+
 const HomePage = async () => {
   const data = await getServerSession(authOptions);
   const user = data?.user as User;

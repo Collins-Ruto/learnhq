@@ -24,11 +24,6 @@ declare module "next-auth" {
       // ...other properties
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -43,21 +38,21 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user }) {
       console.log("res jwt callback", { token, user })
-      const u = user as unknown as User
+      // const u = user as unknown as User
+      // console.log("user auth", user)
+      
       if (user) {
+        // console.log("user auth", user)
         return {
           ...token,
-          id: u.id,
-          role: u.role,
-          streamId: u.streamId,
-          phone: u.phone,
+          ...user
         }
       }
       return token
     },
 
     session: ({ session, token }) => {
-      console.log('Session Callback', { session, token })
+      console.log('Session Callback', { session })
       return {
         ...session,
         user: {
@@ -94,7 +89,7 @@ export const authOptions: NextAuthOptions = {
         }
       },
       async authorize(credentials) {
-        console.log("credentialss", credentials)
+        // console.log("credentialss", credentials)
         if (!credentials?.username || !credentials.password) {
           return null
         }
@@ -149,13 +144,13 @@ export const authOptions: NextAuthOptions = {
         if (typeof user.password !== "string") {
           return null; // or handle the error in some other way
         }
-        console.log("next user3", user)
+        // console.log("next user3", user)
 
         const isPasswordValid = await compare(
           credentials.password,
           user.password
         )
-        console.log("next user4", user)
+        // console.log("next user4", user)
 
         if (!isPasswordValid) {
           return null

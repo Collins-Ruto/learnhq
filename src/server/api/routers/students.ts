@@ -25,6 +25,22 @@ export const studentRouter = createTRPCRouter({
     });
   }),
 
+  getAllPrint: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.student.findMany({
+      include: {
+        stream: true,
+        exams: true,
+        fees: true
+      },
+      where: {
+        deleted: false
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+  }),
+
   getIds: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.student.findMany({
       select: {

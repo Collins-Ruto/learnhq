@@ -6,5 +6,6 @@ export { default as DateTime } from "./DateTime";
 export { default as Button } from "./Button";
 export { default as Editor } from "./Editor";
 export { default as PdfExams } from "./PdfExams";
+export { default as XlsxPdf } from "./XlsxPdf";
 export { default as StatusMsg } from "./StatusMsg";
 export { default as PubHeader } from "./PubHeader";
