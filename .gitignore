@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+/components/Generator.tsx
+/app/page/utils
+
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal

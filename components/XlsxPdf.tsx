@@ -6,6 +6,7 @@ import * as XLSX from "xlsx";
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import Image from "next/image";
 
 interface ExcelRow {
   [key: string]: string;
@@ -131,7 +132,7 @@ function xlsxPdf() {
     <div>
       <div>
         <label className="mb-2 block font-medium" htmlFor="file_input">
-          Upload exel file
+          Upload excel file
         </label>
         <input
           onChange={(e) => {
@@ -146,9 +147,22 @@ function xlsxPdf() {
           xlsx
         </p>
       </div>
-      <div className=" bg-blue-500 p-2 px-4" onClick={download}>
-        parse
-      </div>
+      <button
+        onClick={() => {
+          download();
+        }}
+        type="button"
+        className="flex items-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      >
+        Download
+        <Image
+          src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/downloading-updates.png"
+          className="ml-1 w-6 "
+          height={100}
+          width={100}
+          alt=""
+        />
+      </button>
     </div>
   );
 }
