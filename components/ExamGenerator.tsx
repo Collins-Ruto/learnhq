@@ -21,8 +21,8 @@ function ExamGenerator() {
     // const streamResults = results.filter((result) => result.streamId === stream.id)
   });
 
-    // generateExamSeries();
-    generateExams();
+  // generateExamSeries();
+  generateExams();
 
   return <div>Exam Generation</div>;
 }
@@ -47,11 +47,13 @@ function generateExams() {
       .toLowerCase();
     const results: Result[] = [];
     Subjects.map((subject, index) => {
-      const newResult = {
-        slug: subject.slug,
-        marks: result[index + 3]?.substring(0, 2),
-      } as Result;
-      results.push(newResult);
+      if (result[index + 3] !== "") {
+        const newResult = {
+          slug: subject.slug,
+          marks: result[index + 3]?.substring(0, 2),
+        } as Result;
+        results.push(newResult);
+      }
     });
 
     const exam = {

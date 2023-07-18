@@ -3,7 +3,7 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 // import { setTimeout } from 'timers/promises'
 
 import { appRouter } from "@/server/api/root";
-import { examSeries } from '~/assets/results';
+import { allExams, examSeries } from '~/assets/results';
 // import { prisma } from "@/server/db";
 
 const prisma = new PrismaClient()
@@ -425,6 +425,18 @@ async function main() {
   //   })
   //   console.log(`Created exam with id: ${exam.id}`)
   // }
+
+  // for (const u of allExams) {
+  //   // const { studentId, ...inputData } = u
+  //   const exam = await prisma.exam.create({
+  //     data: u
+  //   })
+  //   console.log(`Created exam with id: ${exam.id}`)
+  // }
+
+  const text = "Form 1-2021-TERM 1";
+  const formattedText = text.replace(/-/g, ' - ');
+  console.log(formattedText);
 
   // const data = await caller.course.getAll();
   // for (const u of data) {
