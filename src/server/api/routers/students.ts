@@ -99,7 +99,7 @@ export const studentRouter = createTRPCRouter({
     const { streamId, ...inputData } = input
     return ctx.prisma.student.create({
       data: {
-        createdAt: new Date(),
+        // createdAt: new Date(),
         stream: {
           connect: {
             slug: streamId
@@ -107,6 +107,25 @@ export const studentRouter = createTRPCRouter({
         },
         ...inputData
       },
+    });
+  }),
+
+  addManyStudent: protectedProcedure.input(z.array(z.object({
+    name: z.string(),
+    slug: z.string(),
+    email: z.string(),
+    password: z.string(),
+    phone: z.string(),
+    parent: z.string(),
+    gender: z.string(),
+    admissionId: z.string(),
+    streamId: z.string(),
+    dateOfBirth: z.string(),
+  }))).mutation(async ({ ctx, input }) => {
+    
+    // console.log("trpc input", input)
+    return ctx.prisma.student.createMany({
+      data: input,
     });
   }),
 
