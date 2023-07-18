@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { WorkSheet } from "xlsx";
+import type { WorkSheet } from "xlsx";
 import * as XLSX from "xlsx";
 // import * as fs from "fs";
 
@@ -8,11 +8,11 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
 
-interface ExcelRow {
-  [key: string]: string;
-}
+// interface ExcelRow {
+//   [key: string]: string;
+// }
 
-function xlsxPdf() {
+function Page() {
   const doc = new jsPDF("landscape");
 
   const [results, setResults] = useState<string[][]>([[]]);
@@ -167,4 +167,4 @@ function xlsxPdf() {
   );
 }
 
-export default xlsxPdf;
+export default Page;
