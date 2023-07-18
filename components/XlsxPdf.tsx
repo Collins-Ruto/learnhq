@@ -38,9 +38,6 @@ function Page() {
         setResults(data);
 
         // console.log(data);
-
-        // Process the parsed data
-        // ...
       };
 
       reader.readAsBinaryString(file);

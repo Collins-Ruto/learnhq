@@ -10,6 +10,7 @@ import { streamRouter } from "./routers/stream";
 import { dataRouter } from "./routers/data";
 import { taskRouter } from "./routers/task";
 import { courseRouter } from "./routers/course";
+import { examSeriesRouter } from "./routers/examSeries";
 
 /**
  * This is the primary router for your server.
@@ -27,7 +28,8 @@ export const appRouter = createTRPCRouter({
   data: dataRouter,
   task: taskRouter,
   course: courseRouter,
-  example: exampleRouter
+  example: exampleRouter,
+  examSeries: examSeriesRouter,
 });
 
 // export type definition of API

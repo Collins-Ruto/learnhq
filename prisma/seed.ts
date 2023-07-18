@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { PrismaClient, type Prisma } from '@prisma/client'
-import { setTimeout } from 'timers/promises'
+// import { setTimeout } from 'timers/promises'
 
 import { appRouter } from "@/server/api/root";
+import { examSeries } from '~/assets/results';
 // import { prisma } from "@/server/db";
 
 const prisma = new PrismaClient()
 
-const caller = appRouter.createCaller({
-  session: null,
-  prisma: prisma,
-});
+// const caller = appRouter.createCaller({
+//   session: null,
+//   prisma: prisma,
+// });
 
 const teacherData: Prisma.TeacherCreateInput[] = [
   {
@@ -247,144 +248,144 @@ const streamData: Prisma.StreamCreateInput[] = [
 //         }
 //       }
 //     ]
-const examData: Prisma.ExamCreateInput[] = [
-  {
-    "name": "End Term 1",
-    "examDate": "10-03-2020",
-    "slug": "242021i",
-    "term": "2021 I",
-    "results": [
-      { slug: "bio", marks: "74" },
-      { slug: "bss", marks: "86" },
-      { slug: "eng", marks: "69" },
-      { slug: "geo", marks: "76" },
-      { slug: "phy", marks: "54" },
-      { slug: "chem", marks: "69" },
-      { slug: "kisw", marks: "66" },
-      { slug: "math", marks: " 67" }
-    ],
-    "student": {
-      "connect": { "id": "641dd16d2eece6ce9587cb0c" }
-    }
-  },
-  {
-    "name": "End Term 1",
-    "examDate": "10-03-2020",
-    "slug": "252020i",
-    "term": "2020 I",
-    "results": [
-      { slug: "bio", marks: "89" },
-      { slug: "bss", marks: "69" },
-      { slug: "eng", marks: "88" },
-      { slug: "phy", marks: "68" },
-      { slug: "agri", marks: "69" },
-      { slug: "hist", marks: "78" },
-      { slug: "kisw", marks: "79" },
-      { slug: "math", marks: "78" }
-    ],
-    "student": {
-      "connect": { "id": "641dd5d8590da608c00b4e69" }
-    }
-  },
-  {
-    "name": "End Term 1",
-    "examDate": "10-03-2020",
-    "slug": "282021i",
-    "term": "2021 I",
-    "results": [
-      { slug: "bio", marks: "88" },
-      { slug: "bss", marks: "75" },
-      { slug: "eng", marks: "86" },
-      { slug: "phy", marks: "79" },
-      { slug: "chem", marks: "78" },
-      { slug: "hist", marks: " 67" },
-      { slug: "kisw", marks: "87" },
-      { slug: "math", marks: "92" }
-    ],
-    "student": {
-      "connect": { "id": "641dd16f2eece6ce9587cb0d" }
-    }
-  },
-  {
-    "name": "End Term 3",
-    "examDate": "10-03-2020",
-    "slug": "282021iii",
-    "term": "2021 III",
-    "results": [
-      { slug: "bio", marks: " 67" },
-      { slug: "bss", marks: "78" },
-      { slug: "eng", marks: "75" },
-      { slug: "phy", marks: "74" },
-      { slug: "chem", marks: "76" },
-      { slug: "hist", marks: "64" },
-      { slug: "kisw", marks: "89" },
-      { slug: "math", marks: "72" }
-    ],
-    "student": {
-      "connect": { "id": "641dd5df590da608c00b4e6d" }
-    }
-  },
-  {
-    "name": "End Term 1",
-    "examDate": "10-03-2020",
-    "slug": "142021i",
-    "term": "2021 I",
-    "results": [
+// const examData: Prisma.ExamCreateInput[] = [
+//   {
+//     "name": "End Term 1",
+//     "examDate": "10-03-2020",
+//     "slug": "242021i",
+//     "term": "2021 I",
+//     "results": [
+//       { slug: "bio", marks: "74" },
+//       { slug: "bss", marks: "86" },
+//       { slug: "eng", marks: "69" },
+//       { slug: "geo", marks: "76" },
+//       { slug: "phy", marks: "54" },
+//       { slug: "chem", marks: "69" },
+//       { slug: "kisw", marks: "66" },
+//       { slug: "math", marks: " 67" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd16d2eece6ce9587cb0c" }
+//     }
+//   },
+//   {
+//     "name": "End Term 1",
+//     "examDate": "10-03-2020",
+//     "slug": "252020i",
+//     "term": "2020 I",
+//     "results": [
+//       { slug: "bio", marks: "89" },
+//       { slug: "bss", marks: "69" },
+//       { slug: "eng", marks: "88" },
+//       { slug: "phy", marks: "68" },
+//       { slug: "agri", marks: "69" },
+//       { slug: "hist", marks: "78" },
+//       { slug: "kisw", marks: "79" },
+//       { slug: "math", marks: "78" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd5d8590da608c00b4e69" }
+//     }
+//   },
+//   {
+//     "name": "End Term 1",
+//     "examDate": "10-03-2020",
+//     "slug": "282021i",
+//     "term": "2021 I",
+//     "results": [
+//       { slug: "bio", marks: "88" },
+//       { slug: "bss", marks: "75" },
+//       { slug: "eng", marks: "86" },
+//       { slug: "phy", marks: "79" },
+//       { slug: "chem", marks: "78" },
+//       { slug: "hist", marks: " 67" },
+//       { slug: "kisw", marks: "87" },
+//       { slug: "math", marks: "92" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd16f2eece6ce9587cb0d" }
+//     }
+//   },
+//   {
+//     "name": "End Term 3",
+//     "examDate": "10-03-2020",
+//     "slug": "282021iii",
+//     "term": "2021 III",
+//     "results": [
+//       { slug: "bio", marks: " 67" },
+//       { slug: "bss", marks: "78" },
+//       { slug: "eng", marks: "75" },
+//       { slug: "phy", marks: "74" },
+//       { slug: "chem", marks: "76" },
+//       { slug: "hist", marks: "64" },
+//       { slug: "kisw", marks: "89" },
+//       { slug: "math", marks: "72" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd5df590da608c00b4e6d" }
+//     }
+//   },
+//   {
+//     "name": "End Term 1",
+//     "examDate": "10-03-2020",
+//     "slug": "142021i",
+//     "term": "2021 I",
+//     "results": [
 
-      { slug: "bio", marks: "76" },
-      { slug: "bss", marks: "69" },
-      { slug: "eng", marks: "78" },
-      { slug: "phy", marks: "85" },
-      { slug: "agri", marks: "86" },
-      { slug: "chem", marks: "65" },
-      { slug: "hist", marks: "68" },
-      { slug: "kisw", marks: "77" },
-      { slug: "math", marks: "67" }
-    ],
-    "student": {
-      "connect": { "id": "641dd5e2590da608c00b4e6f" }
-    }
-  },
-  {
-    "name": "End Term 1",
-    "examDate": "10-03-2020",
-    "slug": "172021i",
-    "term": "2021 I",
-    "results": [
-      { slug: "bio", marks: "86" },
-      { slug: "bss", marks: "77" },
-      { slug: "eng", marks: "78" },
-      { slug: "phy", marks: "67" },
-      { slug: "agri", marks: "66" },
-      { slug: "chem", marks: "67" },
-      { slug: "kisw", marks: "87" },
-      { slug: "math", marks: "75" }
-    ],
-    "student": {
-      "connect": { "id": "641dd16d2eece6ce9587cb0c" }
-    }
-  },
-  {
-    "name": "End Term 2",
-    "examDate": "10-03-2020",
-    "slug": "292021ii",
-    "term": "2021 II",
-    "results": [
-      { slug: "bio", marks: "77" },
-      { slug: "bss", marks: "77" },
-      { slug: "eng", marks: " 67" },
-      { slug: "geo", marks: "80" },
-      { slug: "phy", marks: "89" },
-      { slug: "agri", marks: "86" },
-      { slug: "chem", marks: "68" },
-      { slug: "kisw", marks: "92" },
-      { slug: "math", marks: "78" }
-    ],
-    "student": {
-      "connect": { "id": "641dd16f2eece6ce9587cb0d" }
-    }
-  }
-]
+//       { slug: "bio", marks: "76" },
+//       { slug: "bss", marks: "69" },
+//       { slug: "eng", marks: "78" },
+//       { slug: "phy", marks: "85" },
+//       { slug: "agri", marks: "86" },
+//       { slug: "chem", marks: "65" },
+//       { slug: "hist", marks: "68" },
+//       { slug: "kisw", marks: "77" },
+//       { slug: "math", marks: "67" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd5e2590da608c00b4e6f" }
+//     }
+//   },
+//   {
+//     "name": "End Term 1",
+//     "examDate": "10-03-2020",
+//     "slug": "172021i",
+//     "term": "2021 I",
+//     "results": [
+//       { slug: "bio", marks: "86" },
+//       { slug: "bss", marks: "77" },
+//       { slug: "eng", marks: "78" },
+//       { slug: "phy", marks: "67" },
+//       { slug: "agri", marks: "66" },
+//       { slug: "chem", marks: "67" },
+//       { slug: "kisw", marks: "87" },
+//       { slug: "math", marks: "75" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd16d2eece6ce9587cb0c" }
+//     }
+//   },
+//   {
+//     "name": "End Term 2",
+//     "examDate": "10-03-2020",
+//     "slug": "292021ii",
+//     "term": "2021 II",
+//     "results": [
+//       { slug: "bio", marks: "77" },
+//       { slug: "bss", marks: "77" },
+//       { slug: "eng", marks: " 67" },
+//       { slug: "geo", marks: "80" },
+//       { slug: "phy", marks: "89" },
+//       { slug: "agri", marks: "86" },
+//       { slug: "chem", marks: "68" },
+//       { slug: "kisw", marks: "92" },
+//       { slug: "math", marks: "78" }
+//     ],
+//     "student": {
+//       "connect": { "id": "641dd16f2eece6ce9587cb0d" }
+//     }
+//   }
+// ]
 
 // const adminData: Prisma.AdminCreateInput[] = 
 const studentData = [{ "id": "641dd16d2eece6ce9587cb0c" }, { "id": "641dd16f2eece6ce9587cb0d" }, { "id": "641dd1712eece6ce9587cb0e" }, { "id": "641dd5d8590da608c00b4e69" }, { "id": "641dd5da590da608c00b4e6a" }, { "id": "641dd5db590da608c00b4e6b" }, { "id": "641dd5dd590da608c00b4e6c" }, { "id": "641dd5df590da608c00b4e6d" }, { "id": "641dd5e2590da608c00b4e6f" }, { "id": "641dd5e4590da608c00b4e70" }, { "id": "641dd5e5590da608c00b4e71" }, { "id": "641dd5e7590da608c00b4e72" }, { "id": "641dd5e9590da608c00b4e73" }, { "id": "641dd5eb590da608c00b4e74" }, { "id": "641dd5ec590da608c00b4e75" }, { "id": "641dd5ee590da608c00b4e76" }, { "id": "641dd5f0590da608c00b4e77" }]
@@ -410,6 +411,21 @@ async function main() {
   //   console.log(`Created exam with id: ${exam.id}`)
   // }
 
+  // for (const u of examSeries) {
+  //   const { streamId, ...inputData } = u
+  //   const exam = await prisma.examSeries.create({
+  //     data: {
+  //       stream: {
+  //         connect: {
+  //           id: streamId
+  //         }
+  //       },
+  //       ...inputData
+  //     },
+  //   })
+  //   console.log(`Created exam with id: ${exam.id}`)
+  // }
+
   // const data = await caller.course.getAll();
   // for (const u of data) {
   //   const entry = await prisma.course.update({
@@ -426,6 +442,7 @@ async function main() {
 main()
   .catch((e) => {
     console.error(e)
+    console.error(e.message)
     process.exit(1)
   })
   .finally(async () => {

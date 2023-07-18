@@ -16,7 +16,7 @@ export const examRouter = createTRPCRouter({
       orderBy: {
         createdAt: 'desc'
       },
-      take: 10,
+      take: 15,
       skip: input,
     });
   }),
@@ -76,6 +76,7 @@ export const examRouter = createTRPCRouter({
   addExam: protectedProcedure.input(z.object({
     name: z.string(),
     slug: z.string(),
+    examSeriesId: z.string(),
     term: z.string(),
     results: z.array(z.object({
       slug: z.string(),
@@ -94,6 +95,7 @@ export const examRouter = createTRPCRouter({
   addManyExams: protectedProcedure.input(z.array(z.object({
     name: z.string(),
     slug: z.string(),
+    examSeriesId: z.string(),
     term: z.string(),
     results: z.array(z.object({
       slug: z.string(),

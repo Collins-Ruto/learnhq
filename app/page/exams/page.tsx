@@ -24,14 +24,14 @@ function Exams() {
     if (data) {
       setExams(data);
     }
-    if (count && count > 10) {
+    if (count && count > 15) {
       setPages((pages) => ({
         ...pages,
-        hasNextPage: count - 10 > pagesCount,
+        hasNextPage: count - 15 > pagesCount,
       }));
       setPages((pages) => ({
         ...pages,
-        hasPreviousPage: pagesCount + 10 > count,
+        hasPreviousPage: pagesCount + 15 > count,
       }));
     }
   }, [count, data, pagesCount]);
@@ -52,11 +52,11 @@ function Exams() {
 
   return (
     <div className="w-screen md:w-full">
-      <div className="p-4 text-2xl font-semibold">
+      <div className="p-4 pt-4 text-2xl font-semibold">
         <h3>Exam Results</h3>
       </div>
       {isLoading && <Loader />}
-      <div className="flex flex-col justify-end gap-4 p-4 md:flex-row">
+      <div className="flex flex-col justify-end gap-4 p-4 py-2 md:flex-row">
         <div>
           <input
             onChange={(e) => {
@@ -113,10 +113,10 @@ function Exams() {
         <table className=" w-full text-justify">
           <thead>
             <tr className="p-4">
-              <th className="p-4">Exam</th>
-              <th className="p-4">Student</th>
-              <th className="p-4">Term</th>
-              <th className="p-4 px-6">Date</th>
+              <th className="p-2">Exam</th>
+              <th className="p-2">Student</th>
+              <th className="p-2">Term</th>
+              <th className="p-2 px-6">Date</th>
               {Subjects.map((subject, index) => (
                 <th className="border-x-2 p-2" key={index}>
                   {subject.slug}
@@ -126,22 +126,23 @@ function Exams() {
           </thead>
           <tbody>
             {exams?.map((exam, index) => {
+              const date = new Date(exam.createdAt)
               return (
                 <tr
                   className={`p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
                   key={index}
                 >
-                  <td className="p-4">{exam.name}</td>
-                  <td className="p-4">{exam?.student?.name}</td>
-                  <td className="p-4">{exam?.term}</td>
-                  <td className="p-4">{exam.examDate}</td>
+                  <td className="p-2">{exam.name}</td>
+                  <td className="p-2">{exam?.student?.name}</td>
+                  <td className="p-2">{exam?.term}</td>
+                  <td className="p-2">{date.toDateString().slice(3,15)}</td>
                   {Subjects.map((subject, index) => {
                     const resultsObj: Result[] = exam.results as Result[];
                     const myResult = resultsObj.find(
                       (obj) => obj.slug === subject.slug
                     );
                     return (
-                      <td className="border-x-2 p-4" key={index}>
+                      <td className="border-x-2 p-2" key={index}>
                         {myResult?.marks || "-"}
                       </td>
                     );

@@ -80,13 +80,14 @@ model Student {
     phone       String
     parent      String
     gender      String
+    kcpe        String  @default("0")
     createdAt   DateTime   @default(now())
     admissionId String @unique
     subjects    Subject[]
     exams       Exam[]
     fees        Fee[]
-    stream     Stream @relation(fields: [streamId], references: [id])
-    streamId   String @db.ObjectId
+    stream      Stream @relation(fields: [streamId], references: [id])
+    streamId    String @db.ObjectId
     deleted     Boolean     @default(false)
 }
 model Teacher {
@@ -124,10 +125,25 @@ model Exam {
     results     Result[]
     examDate    String
     student     Student @relation(fields: [studentId], references: [id])
+    examSeries  ExamSeries @relation(fields: [examSeriesId], references: [id])
     studentId   String @db.ObjectId
+    examSeriesId String @db.ObjectId
     deleted     Boolean     @default(false)
 }
 
+model ExamSeries {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    term        String
+    seriesDate  String
+    form        String
+    year        String
+    createdAt   DateTime   @default(now())
+    exams       Exam[]
+    stream      Stream  @relation(fields: [streamId], references: [id])
+    streamId    String @db.ObjectId
+    deleted     Boolean     @default(false)
+}
 
 model Fee {
     id          String @id @default(auto()) @map("_id") @db.ObjectId
@@ -150,6 +166,7 @@ model Stream {
     lessons     Lesson[]
     tasks       Task[]
     students    Student[]
+    examSeries  ExamSeries[]
     deleted     Boolean     @default(false)
 }
 

@@ -29,7 +29,7 @@ export const studentRouter = createTRPCRouter({
     return ctx.prisma.student.findMany({
       include: {
         stream: true,
-        exams: true,
+        // exams: true,
         fees: true
       },
       where: {
@@ -45,9 +45,12 @@ export const studentRouter = createTRPCRouter({
     return ctx.prisma.student.findMany({
       select: {
         id: true,
-        name: true,
+        // name: true,
         streamId: true,
       },
+      orderBy: {
+        admissionId: 'desc'
+      }
     });
   }),
 
@@ -89,6 +92,7 @@ export const studentRouter = createTRPCRouter({
     phone: z.string(),
     parent: z.string(),
     gender: z.string(),
+    kcpe: z.string(),
     admissionId: z.string(),
     streamId: z.string(),
     dateOfBirth: z.string(),
@@ -118,6 +122,7 @@ export const studentRouter = createTRPCRouter({
     phone: z.string(),
     parent: z.string(),
     gender: z.string(),
+    kcpe: z.string(),
     admissionId: z.string(),
     streamId: z.string(),
     dateOfBirth: z.string(),

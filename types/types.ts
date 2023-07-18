@@ -36,40 +36,32 @@ export type GradedSubjects = {
 
 export const Subjects: Subject[] = [
   {
-    "name": "Chemistry",
-    "slug": "chem"
+    "name": "English",
+    "slug": "eng"
+  },
+  {
+    "name": "Kiswahili",
+    "slug": "kis"
+  },
+  {
+    "name": "Maths",
+    "slug": "mat"
   },
   {
     "name": "Biology",
     "slug": "bio"
   },
   {
-    "name": "Maths",
-    "slug": "math"
-  },
-  {
-    "name": "English",
-    "slug": "eng"
-  },
-  {
-    "name": "Kiswahili",
-    "slug": "kisw"
-  },
-  {
     "name": "Physics",
     "slug": "phy"
   },
   {
-    "name": "Bussiness",
-    "slug": "bss"
-  },
-  {
-    "name": "Agriculture",
-    "slug": "agri"
+    "name": "Chemistry",
+    "slug": "che"
   },
   {
     "name": "History",
-    "slug": "hist"
+    "slug": "his"
   },
   {
     "name": "Geography",
@@ -80,8 +72,20 @@ export const Subjects: Subject[] = [
     "slug": "cre"
   },
   {
-    "name": "Music",
-    "slug": "msc"
+    "name": "Agriculture",
+    "slug": "agr"
+  },
+  {
+    "name": "Bussiness",
+    "slug": "bss"
+  },
+  {
+    "name": "Computer",
+    "slug": "com"
+  },
+  {
+    "name": "French",
+    "slug": "fre"
   }
 ]
 

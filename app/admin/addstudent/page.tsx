@@ -9,6 +9,7 @@ import { Button, Loader, StatusMsg } from "~/components";
 //   name: "Cynthia Graham",
 //   email: "cynthia@gmail.com",
 //   gender: "Female",
+//   kcpe: "300",
 //   parent: "George Graham",
 //   admid: "19",
 //   phone: 7122342729,
@@ -59,6 +60,7 @@ function AddStudent() {
       "phone",
       "parent",
       "gender",
+      "kcpe",
       "admissionId",
       "streamId",
     ];
@@ -244,6 +246,22 @@ function AddStudent() {
                         type="text"
                         placeholder="eg. 49mike"
                         name="slug"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div>
+                      <label>KCPE Marks </label>
+                      <input
+                        onChange={(e) => {
+                          handleInput(e);
+                        }}
+                        value={student?.kcpe?.toLowerCase()}
+                        className="focus:shadow-outline w-full appearance-none rounded border px-3 py-3 leading-tight text-gray-700 shadow focus:outline-none"
+                        type="text"
+                        placeholder="eg. 49mike"
+                        name="kcpe"
                       />
                     </div>
                   </div>
