@@ -21,6 +21,8 @@ export const examRouter = createTRPCRouter({
     });
   }),
 
+  
+
   getAllPrint: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.exam.findMany({
       include: {
@@ -44,7 +46,12 @@ export const examRouter = createTRPCRouter({
     return ctx.prisma.exam.findMany({
       select: {
         id: true,
+        name: true
       },
+      orderBy: {
+        createdAt: 'asc'
+      },
+      take: 20
     });
   }),
 

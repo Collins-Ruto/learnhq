@@ -3,7 +3,7 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 // import { setTimeout } from 'timers/promises'
 
 import { appRouter } from "@/server/api/root";
-import { allExams, examSeries } from '~/assets/results';
+import { allDbStudents, allExamNames, allExams, examForSeries, examSeries, examSeriesIds } from '~/assets/results';
 // import { prisma } from "@/server/db";
 
 const prisma = new PrismaClient()
@@ -434,9 +434,44 @@ async function main() {
   //   console.log(`Created exam with id: ${exam.id}`)
   // }
 
-  const text = "Form 1-2021-TERM 1";
-  const formattedText = text.replace(/-/g, ' - ');
-  console.log(formattedText);
+  // let variable = 0;
+  // for (const u of examForSeries) {
+  //   // const { studentId, ...inputData } = u
+  //   const exam = await prisma.exam.update({
+  //     where: {
+  //       id: u.id
+  //     },
+  //     data: {
+  //       examSeriesId : examSeriesIds[variable]?.id
+  //     }
+  //   })
+
+  //   variable ++
+  //   console.log(`updated exam with id: ${exam.id}`)
+  // }
+
+  // const text = "Form 1-2021-TERM 1";
+  // const formattedText = text.replace(/-/g, ' - ');
+  // console.log(formattedText);
+
+  // const data = await caller.exam.getIds();
+  // for (const u of examSeriesIds) {
+  //   const entry = await prisma.examSeries.update({
+  //     where: { id: u.id },
+  //     data: {name: u.name.replace(/-/g, ' - ')}
+  //   })
+  //   console.log(`updated entry with name: ${entry.name}`)
+  // }
+
+  // const data = await caller.student.getIds();
+  for (const u of allDbStudents) {
+    const kcpe = Math.floor(Math.random() * 100) + 300;
+    const entry = await prisma.student.update({
+      where: { id: u.id },
+      data: {kcpe: kcpe.toString()}
+    })
+    console.log(`updated entry with kcpe: ${kcpe}`)
+  }
 
   // const data = await caller.course.getAll();
   // for (const u of data) {

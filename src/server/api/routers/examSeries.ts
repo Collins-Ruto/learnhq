@@ -9,7 +9,12 @@ import type { Prisma } from "@prisma/client";
 
 export const examSeriesRouter = createTRPCRouter({
     getAll: protectedProcedure.query(({ ctx }) => {
-        return ctx.prisma.examSeries.findMany();
+        return ctx.prisma.examSeries.findMany({
+            include: {
+                stream: true,
+                exams: true
+            }
+        });
     }),
 
     // getAllPrint: protectedProcedure.query(({ ctx }) => {
@@ -27,9 +32,9 @@ export const examSeriesRouter = createTRPCRouter({
     //     });
     // }),
 
-    // count: protectedProcedure.query(({ ctx }) => {
-    //     return ctx.prisma.exam.count();
-    // }),
+    count: protectedProcedure.query(({ ctx }) => {
+        return ctx.prisma.examSeries.count();
+    }),
 
     getIds: protectedProcedure.query(({ ctx }) => {
         return ctx.prisma.examSeries.findMany({
@@ -40,17 +45,37 @@ export const examSeriesRouter = createTRPCRouter({
     }),
 
     getById: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-        if (input === 'all') {
-            return ctx.prisma.examSeries.findMany({
-                where: {
-                    id: input
-                },
-                select: {
-                    id: true,
-                    name: true,
-                },
-            });
-        }
+        // if (input === 'all') {
+        return ctx.prisma.examSeries.findFirst({
+            where: {
+                id: input
+            },
+            include: {
+                stream: true,
+                exams: {
+                    include: {
+                        student: true
+                    }
+                }
+            }
+        });
+        // }
+    }),
+
+    getByForm: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+        return ctx.prisma.examSeries.findMany({
+            where: {
+                form: input
+            },
+            include: {
+                stream: true,
+                exams: {
+                    include: {
+                        student: true
+                    }
+                }
+            }
+        });
     }),
 
     studentExams: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
@@ -105,26 +130,32 @@ export const examSeriesRouter = createTRPCRouter({
         return Promise.all(createExamPromises);
     }),
 
-    // search: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    //     console.log("search in", input)
-    //     const searchQuery: Prisma.ExamWhereInput = {
-    //         OR: [
-    //             { name: { contains: input, mode: "insensitive" } },
-    //             { student: { name: { contains: input, mode: "insensitive" } } },
-    //             { slug: { contains: input, mode: "insensitive" } },
-    //             { term: { contains: input, mode: "insensitive" } },
-    //             // Add additional conditions using the OR operator if needed
-    //         ]
-    //     };
-    //     return ctx.prisma.examSeries.findMany({
-    //         where: searchQuery,
-    //         include: {
-    //             student: true
-    //         },
-    //         orderBy: {
-    //             createdAt: 'desc'
-    //         },
-    //         take: 20
-    //     })
-    // }),
+    search: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+        console.log("search in", input)
+        const searchQuery: Prisma.ExamSeriesWhereInput = {
+            OR: [
+                { name: { contains: input, mode: "insensitive" } },
+                { stream: { name: { contains: input, mode: "insensitive" } } },
+                { stream: { slug: { contains: input, mode: "insensitive" } } },
+                { form: { contains: input, mode: "insensitive" } },
+                { term: { contains: input, mode: "insensitive" } },
+                // Add additional conditions using the OR operator if needed
+            ]
+        };
+        return ctx.prisma.examSeries.findMany({
+            where: searchQuery,
+            include: {
+                stream: true,
+                exams: {
+                    include: {
+                        student: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            // take: 20
+        })
+    }),
 });

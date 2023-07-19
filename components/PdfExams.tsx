@@ -1,37 +1,44 @@
 "use client";
 
-import { api } from "@/utils/api";
-import type { Exam, Stream, Student } from "@prisma/client";
+import type { Exam, ExamSeries, Stream, Student } from "@prisma/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Subjects, grades } from "~/types/types";
 
-export default function AppComponent() {
-  // initalize JSPDF doc print landscape page 
+export default function AppComponent({
+  examSeries,
+}: {
+  examSeries: (ExamSeries & {
+    stream: Stream;
+    exams: (Exam & { student: Student })[];
+  })[];
+}) {
+  // initalize JSPDF doc print landscape page
   const doc = new jsPDF("landscape");
 
-  const [exams, setExams] =
-    useState<(Exam & { student: Student & { stream: Stream } })[]>();
-  const { data, isLoading } = api.exam.getAllPrint.useQuery();
+  const [printExams, setPrintExams] = useState<(Exam & { student: Student })[]>();
+  // const { data, isLoading } = api.exam.getAllPrint.useQuery();
 
   useEffect(() => {
-    if (data) {
-      setExams(data);
-    }
-  }, [data]);
+    const allExams: (Exam & { student: Student })[] = [];
+    examSeries.forEach((examSeries) => {
+      allExams.push(...examSeries.exams);
+    });
+    setPrintExams(allExams);
+  }, []);
 
   const filterstd = () => {
     const results: [string[]] = [[]];
-    if (!exams) {
+    if (!printExams) {
       return [];
     }
-    exams.map((std) => {
+    printExams?.map((std) => {
       const newStd = [
         std.student.admissionId,
         std.student.name,
-        std.student.stream.slug.toUpperCase(),
+        stream?.toUpperCase(),
       ];
       let avg = 0;
       let subjectCount = 0;
@@ -43,9 +50,12 @@ export default function AppComponent() {
         avg += parseInt(result[0]?.marks ?? "0");
         subjectCount += result[0]?.marks ? 1 : 0;
       });
+
       newStd.push(subjectCount.toString());
+      newStd.push(std.student.kcpe.toString());
       newStd.push(avg.toString());
       newStd.push((avg / subjectCount).toFixed(2).toString());
+      newStd.push((avg / subjectCount / subjectCount).toFixed(2).toString());
 
       results.push(newStd);
     });
@@ -112,7 +122,7 @@ export default function AppComponent() {
   //   },
   // });
 
-  // AutoTable formating 
+  // AutoTable formating
   autoTable(doc, {
     body: [
       [
@@ -149,23 +159,27 @@ export default function AppComponent() {
         "ADM",
         "NAME",
         "STR",
-        "CHE",
-        "BIO",
-        "MAT",
         "ENG",
         "KIS",
+        "MAT",
+        "BIO",
         "PHY",
-        "BSS",
-        "AGR",
+        "CHE",
         "HIS",
         "GEO",
         "CRE",
-        "MSC",
+        "AGR",
+        "COM",
+        "FRE",
+        "BST",
         "SBJ",
+        "KCPE",
         "AVG",
         "MRKS",
         "GRD",
-        "POS",
+        "MN PTS",
+        "STR POS",
+        "OVR POS",
       ],
     ],
     body: sortedExams(),
@@ -173,36 +187,40 @@ export default function AppComponent() {
     headStyles: {
       fillColor: "#343a40",
     },
+    styles: {
+      fontSize: 7,
+      minCellWidth: 9,
+    },
   });
 
   const download = () => {
-    doc.save("invoice");
+    doc.save("exam");
   };
 
   return (
     <div>
-      {isLoading  ? (
+      {/* {isLoading  ? (
         <div className="items-center rounded bg-gray-600 px-4 py-2 font-bold text-white">
           preparing
         </div>
-      ) : (
-        <button
-            onClick={() => {
-              download();
-            }}
-          type="button"
-          className="flex items-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        >
-          Download
-          <Image
-            src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/downloading-updates.png"
-            className="ml-1 w-6 "
-            height={100}
-            width={100}
-            alt=""
-          />
-        </button>
-      )}
+      ) : ( */}
+      <button
+        onClick={() => {
+          download();
+        }}
+        type="button"
+        className="flex items-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      >
+        Download
+        <Image
+          src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/downloading-updates.png"
+          className="ml-1 w-6 "
+          height={100}
+          width={100}
+          alt=""
+        />
+      </button>
+      {/*  )} */}
     </div>
   );
 }

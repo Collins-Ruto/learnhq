@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Loader } from "~/components";
+import { Button, Loader, PdfExams } from "~/components";
 import Image from "next/image";
 import { type Result, Subjects } from "~/types/types";
 import { api } from "@/utils/api";
-import type { Exam, Student } from "@prisma/client";
+import type { Exam, ExamSeries, Stream, Student } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 function Exams() {
   const [submit, setSubmit] = useState(false);
@@ -16,22 +17,25 @@ function Exams() {
     hasPreviousPage: false,
   });
 
-  const [exams, setExams] = useState<(Exam & { student: Student })[]>();
-  const { data, isLoading, error } = api.exam.getAll.useQuery(pagesCount);
-  const { data: count } = api.exam.count.useQuery();
+    const router = useRouter();
+
+  const [examSeries, setExamSeries] =
+    useState<(ExamSeries & { stream: Stream })[]>();
+  const { data, isLoading, error } = api.examSeries.getAll.useQuery();
+  const { data: count } = api.examSeries.count.useQuery();
 
   useEffect(() => {
     if (data) {
-      setExams(data);
+      setExamSeries(data);
     }
-    if (count && count > 15) {
+    if (count && count > 20) {
       setPages((pages) => ({
         ...pages,
-        hasNextPage: count - 15 > pagesCount,
+        hasNextPage: count - 20 > pagesCount,
       }));
       setPages((pages) => ({
         ...pages,
-        hasPreviousPage: pagesCount + 15 > count,
+        hasPreviousPage: pagesCount + 20 > count,
       }));
     }
   }, [count, data, pagesCount]);
@@ -40,13 +44,13 @@ function Exams() {
     console.log(error);
   }
 
-  const searchExams = api.exam.search.useQuery(search);
+  const searchExams = api.examSeries.search.useQuery(search);
 
   const searchSubmit = () => {
     console.log("term sc exam", search);
     const { data } = searchExams;
     console.log("search data exam", data);
-    setExams(data);
+    setExamSeries(data);
     setSubmit(false);
   };
 
@@ -113,40 +117,30 @@ function Exams() {
         <table className=" w-full text-justify">
           <thead>
             <tr className="p-4">
-              <th className="p-2">Exam</th>
-              <th className="p-2">Student</th>
-              <th className="p-2">Term</th>
+              <th className="p-2">Exam Series</th>
               <th className="p-2">Date</th>
-              {Subjects.map((subject, index) => (
-                <th className="border-x-2 p-2" key={index}>
-                  {subject.slug}
-                </th>
-              ))}
+              <th className="p-2">Form</th>
+              <th className="p-2">Stream</th>
+              <th className="p-2">Term</th>
+              <th className="p-2">Year</th>
+              <th className="p-2">Entries</th>
             </tr>
           </thead>
           <tbody>
-            {exams?.map((exam, index) => {
-              const date = new Date(exam.createdAt)
+            {examSeries?.map((examSerie, index) => {
+              const date = new Date(examSerie.createdAt);
               return (
-                <tr
-                  className={`p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
+                  <tr
+                      onClick={()=>{router.push(`/page/examseries/${examSerie.id}`)}}
+                  className={`cursor-pointer p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
                   key={index}
                 >
-                  <td className="p-2">{exam.name}</td>
-                  <td className="p-2">{exam?.student?.name}</td>
-                  <td className="p-2">{exam?.term}</td>
-                  <td className="p-2">{date.toDateString().slice(3,15)}</td>
-                  {Subjects.map((subject, index) => {
-                    const resultsObj: Result[] = exam.results as Result[];
-                    const myResult = resultsObj.find(
-                      (obj) => obj.slug === subject.slug
-                    );
-                    return (
-                      <td className="border-x-2 p-2" key={index}>
-                        {myResult?.marks || "-"}
-                      </td>
-                    );
-                  })}
+                    <td className="p-2">{examSerie.name}</td>
+                    <td className="p-2">{date.toDateString().slice(3, 15)}</td>
+                    <td className="p-2">{examSerie?.form}</td>
+                    <td className="p-2">{examSerie?.stream?.name}</td>
+                    <td className="p-2">{examSerie?.term}</td>
+                    <td className="p-2">{examSerie?.year}</td>
                 </tr>
               );
             })}
@@ -155,7 +149,7 @@ function Exams() {
         <div className="flex justify-center pb-10 pt-2 align-middle md:pb-0">
           <div
             onClick={() => {
-              setPagesCount(pagesCount - 10);
+              setPagesCount(pagesCount - 20);
             }}
             className={` ${
               pages.hasPreviousPage
@@ -180,7 +174,7 @@ function Exams() {
           </div>
           <div
             onClick={() => {
-              setPagesCount(pagesCount + 10);
+              setPagesCount(pagesCount + 20);
             }}
             className={` ${
               pages.hasNextPage

@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Loader } from "~/components";
+import { Button, Loader, PdfExams } from "~/components";
 import Image from "next/image";
 import { type Result, Subjects } from "~/types/types";
 import { api } from "@/utils/api";
-import type { Exam, Student } from "@prisma/client";
+import type { Exam, ExamSeries, Stream, Student } from "@prisma/client";
 
-function Exams() {
+function Exams({ params: { id } }: { params: { id: string } }) {
   const [submit, setSubmit] = useState(false);
   const [search, setSearch] = useState("");
   const [pagesCount, setPagesCount] = useState(0);
@@ -16,13 +16,24 @@ function Exams() {
     hasPreviousPage: false,
   });
 
+  const [examSeries, setExamSeries] = useState<
+    (ExamSeries & {
+      stream: Stream;
+      exams: (Exam & { student: Student })[];
+    })[]
+  >();
   const [exams, setExams] = useState<(Exam & { student: Student })[]>();
-  const { data, isLoading, error } = api.exam.getAll.useQuery(pagesCount);
+  const { data, isLoading, error } = api.examSeries.getByForm.useQuery(id);
   const { data: count } = api.exam.count.useQuery();
 
   useEffect(() => {
     if (data) {
-      setExams(data);
+      setExamSeries(data);
+      const allExams: (Exam & { student: Student })[] = [];
+      data.forEach((examSeries) => {
+        allExams.push(...examSeries.exams);
+      });
+      setExams(allExams);
     }
     if (count && count > 15) {
       setPages((pages) => ({
@@ -40,11 +51,13 @@ function Exams() {
     console.log(error);
   }
 
-  const searchExams = api.exam.search.useQuery(search);
+  console.log(exams);
 
   const searchSubmit = () => {
     console.log("term sc exam", search);
-    const { data } = searchExams;
+    const data = exams?.filter(
+      (exam) => exam.student.name.includes(search) || exam.name.includes(search)
+    );
     console.log("search data exam", data);
     setExams(data);
     setSubmit(false);
@@ -104,9 +117,11 @@ function Exams() {
               Add
             </Link>
           </div>
-          <div className="">
-            {/* <PdfExams /> */}
-          </div>
+          {examSeries && (
+            <div className="">
+              <PdfExams examSeries={examSeries} />
+            </div>
+          )}
         </div>
       </div>
       <div className="m-4 overflow-auto rounded-xl bg-[#F7F6FB] p-4">
@@ -126,7 +141,7 @@ function Exams() {
           </thead>
           <tbody>
             {exams?.map((exam, index) => {
-              const date = new Date(exam.createdAt)
+              const date = new Date(exam.createdAt);
               return (
                 <tr
                   className={`p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
@@ -135,7 +150,7 @@ function Exams() {
                   <td className="p-2">{exam.name}</td>
                   <td className="p-2">{exam?.student?.name}</td>
                   <td className="p-2">{exam?.term}</td>
-                  <td className="p-2">{date.toDateString().slice(3,15)}</td>
+                  <td className="p-2">{date.toDateString().slice(3, 15)}</td>
                   {Subjects.map((subject, index) => {
                     const resultsObj: Result[] = exam.results as Result[];
                     const myResult = resultsObj.find(
