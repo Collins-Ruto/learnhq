@@ -21,7 +21,20 @@ export const examRouter = createTRPCRouter({
     });
   }),
 
-  
+  getByName: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.exam.findMany({
+      where: {
+        slug: input
+      },
+      include: {
+        student: {
+          include: {
+            stream: true
+          }
+        }
+      },
+    });
+  }),
 
   getAllPrint: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.exam.findMany({
@@ -136,6 +149,33 @@ export const examRouter = createTRPCRouter({
       where: searchQuery,
       include: {
         student: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 20
+    })
+  }),
+
+  searchResults: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    console.log("search in", input)
+    const searchQuery: Prisma.ExamWhereInput = {
+      OR: [
+        { name: { contains: input, mode: "insensitive" } },
+        { student: { name: { contains: input, mode: "insensitive" } } },
+        { slug: { contains: input, mode: "insensitive" } },
+        { term: { contains: input, mode: "insensitive" } },
+        // Add additional conditions using the OR operator if needed
+      ]
+    };
+    return ctx.prisma.exam.findMany({
+      where: searchQuery,
+      include: {
+        student: {
+          include: {
+            stream: true
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'

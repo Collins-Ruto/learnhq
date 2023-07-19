@@ -131,7 +131,9 @@ function Exams() {
               const date = new Date(examSerie.createdAt);
               return (
                   <tr
-                      onClick={()=>{router.push(`/page/examseries/${examSerie.id}`)}}
+                      onClick={()=>{router.push(
+                        `/page/examseries/${convert(examSerie.name)}`
+                      );}}
                   className={`cursor-pointer p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
                   key={index}
                 >
@@ -204,3 +206,38 @@ function Exams() {
 }
 
 export default Exams;
+
+function convertToSlug(input: string): string {
+  
+  return input
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.replace(/^./, (word[0]??"")?.toLowerCase()))
+    .join("-");
+}
+
+function convert(text: string): string {
+  // Split the text
+  const parts = text.split(" - ");
+
+  // Extract parts
+  const form = parts[0]?.toLowerCase();
+  const year = parts[1];
+  const term = parts[2]?.toLowerCase();
+
+  const slug1 = `${year}-${form}-${term}`;
+
+  const parts2 = slug1.split(" ");
+
+  const slug = `${parts2[0]}-${parts2[1]}-${parts2[2]}`;
+
+  // 2022-form-1-term-2
+  // 2022-form-1-term-2
+  return slug;
+}
+
+// Usage
+// const input = "Form 1 - 2022 - TERM 2";
+// const output = convert(input);
+
+// console.log(output); // "2022-form-1-term-2"

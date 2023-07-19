@@ -63,6 +63,7 @@ export const examSeriesRouter = createTRPCRouter({
     }),
 
     getByForm: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+        console.log(input)
         return ctx.prisma.examSeries.findMany({
             where: {
                 form: input
@@ -71,7 +72,11 @@ export const examSeriesRouter = createTRPCRouter({
                 stream: true,
                 exams: {
                     include: {
-                        student: true
+                        student: {
+                            include: {
+                                stream:true
+                            }
+                        }
                     }
                 }
             }
@@ -148,7 +153,11 @@ export const examSeriesRouter = createTRPCRouter({
                 stream: true,
                 exams: {
                     include: {
-                        student: true
+                        student: {
+                            include: {
+                                stream:true
+                            }
+                        }
                     }
                 }
             },

@@ -1,6 +1,7 @@
 "use client";
 
-import type { Exam, ExamSeries, Stream, Student } from "@prisma/client";
+import { api } from "@/utils/api";
+import type { Exam, Stream, Student } from "@prisma/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
@@ -8,26 +9,22 @@ import { useEffect, useState } from "react";
 import { Subjects, grades } from "~/types/types";
 
 export default function AppComponent({
-  examSeries,
+  exams,
 }: {
-  examSeries: (ExamSeries & {
-    stream: Stream;
-    exams: (Exam & { student: Student })[];
-  })[];
+  exams: (Exam & { student: Student & {stream: Stream}})[];
 }) {
   // initalize JSPDF doc print landscape page
   const doc = new jsPDF("landscape");
 
-  const [printExams, setPrintExams] = useState<(Exam & { student: Student })[]>();
+  const [printExams, setExams] =
+    useState<(Exam & { student: Student & { stream: Stream } })[]>(exams);
   // const { data, isLoading } = api.exam.getAllPrint.useQuery();
 
-  useEffect(() => {
-    const allExams: (Exam & { student: Student })[] = [];
-    examSeries.forEach((examSeries) => {
-      allExams.push(...examSeries.exams);
-    });
-    setPrintExams(allExams);
-  }, []);
+  // useEffect(() => {
+  //   if (data) {
+  //     setExams(data);
+  //   }
+  // }, [data]);
 
   const filterstd = () => {
     const results: [string[]] = [[]];
@@ -38,7 +35,7 @@ export default function AppComponent({
       const newStd = [
         std.student.admissionId,
         std.student.name,
-        stream?.toUpperCase(),
+        std.student.stream.slug?.toUpperCase(),
       ];
       let avg = 0;
       let subjectCount = 0;
@@ -50,7 +47,8 @@ export default function AppComponent({
         avg += parseInt(result[0]?.marks ?? "0");
         subjectCount += result[0]?.marks ? 1 : 0;
       });
-
+      
+      
       newStd.push(subjectCount.toString());
       newStd.push(std.student.kcpe.toString());
       newStd.push(avg.toString());
@@ -84,14 +82,17 @@ export default function AppComponent({
     const results = filterstd();
 
     results.map((obj) => {
-      grades.map((grade) => {
-        const mark = parseInt(obj[obj.length - 1] || "0");
+      grades.map((grade) => { 
+        const mark = parseInt(obj[obj.length - 2] || "0");
         const score = grade.score;
         const points = grade.points;
         if (mark >= points) {
           obj.push(score);
         }
       });
+      if (obj.length < 22) {
+        obj.push("X")
+      }
     });
 
     return results;
@@ -102,7 +103,7 @@ export default function AppComponent({
 
     results.sort(
       (a, b) =>
-        parseInt(b[b.length - 2] || "0") - parseInt(a[a.length - 2] || "0")
+        parseInt(b[b.length - 3] || "0") - parseInt(a[a.length - 3] || "0")
     );
 
     const finalResults: [string[]] = [[]];
@@ -114,6 +115,8 @@ export default function AppComponent({
     // remove empty fields created by array.push()
     return finalResults.filter((obj) => obj[3]);
   };
+
+  console.log(sortedExams())
 
   // autoTable(doc, {
   //   theme: "plain",
@@ -176,9 +179,9 @@ export default function AppComponent({
         "KCPE",
         "AVG",
         "MRKS",
-        "GRD",
         "MN PTS",
-        "STR POS",
+        "GRD",
+        // "STR POS",
         "OVR POS",
       ],
     ],
