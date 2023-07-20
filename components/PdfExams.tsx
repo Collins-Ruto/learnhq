@@ -100,8 +100,52 @@ export default function AppComponent({
     return results;
   };
 
-  const sortedExams = () => {
+  const streamRank = () => {
+    interface StreamRes {
+      stream: string;
+      results: [string[]];
+    }
     const results = grading();
+    const resultsByStream: { [key: string]: StreamRes } = {};
+
+    if (!results) return
+
+    for (const result of results) {
+      if (!resultsByStream[result[2] ?? ""]) {
+        console.log("hold not")
+        resultsByStream[result[2] ?? ""] = { stream: result[2] ?? "", results: [] } as unknown as StreamRes;
+      }
+      resultsByStream[result?.[2] ?? ""]?.results?.push(result);
+    }
+
+    // Rank students within each stream based on overallRank
+    for (const stream in resultsByStream) {
+      const studentsInStream = resultsByStream[stream];
+      if (!studentsInStream) return
+      studentsInStream.results.sort(
+        (a, b) =>
+          parseInt(b[b.length - 2] || "0") - parseInt(a[a.length - 2] || "0")
+      );
+      for (let i = 0; i < studentsInStream.results.length; i++) {
+        studentsInStream.results[i]?.push((i + 1).toString());
+      }
+    }
+
+    // Flatten the ranked students from different streams back to a single array
+    const rankedStudents: string[][] = [];
+    for (const result in resultsByStream) {
+      const res = resultsByStream[result];
+      res?.results.map((ress) => (rankedStudents.push(ress)));
+    }
+    //  console.log(rankedStudents);
+    return rankedStudents;
+  }
+
+  // streamRank();
+
+  const overallRank = () => {
+    const results = streamRank();
+    if (!results) return
 
     results.sort(
       (a, b) =>
@@ -111,6 +155,7 @@ export default function AppComponent({
     const finalResults: [string[]] = [[]];
 
     results.map((obj, index) => {
+
       obj.push((index + 1).toString());
       finalResults.push(obj);
     });
@@ -118,7 +163,7 @@ export default function AppComponent({
     return finalResults.filter((obj) => obj[3]);
   };
 
-  console.log(sortedExams());
+  console.log(overallRank());
 
   // autoTable(doc, {
   //   theme: "plain",
@@ -180,14 +225,14 @@ export default function AppComponent({
         "SBJ",
         "KCPE",
         "AVG",
-        "MRKS",
+        "PTS",
         "MN PTS",
         "GRD",
-        // "STR POS",
+        "STR POS",
         "OVR POS",
       ],
     ],
-    body: sortedExams(),
+    body: overallRank(),
     theme: "grid",
     headStyles: {
       fillColor: "#343a40",

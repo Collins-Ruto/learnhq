@@ -45,7 +45,7 @@ export const studentRouter = createTRPCRouter({
     return ctx.prisma.student.findMany({
       select: {
         id: true,
-        // name: true,
+        name: true,
         streamId: true,
       },
       orderBy: {

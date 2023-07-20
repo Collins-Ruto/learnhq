@@ -21,6 +21,7 @@ const dummyExams: Exam[] = [
     createdAt: new Date(),
     examDate: "",
     studentId: "",
+    examSeriesId: '',
     deleted: false,
   },
 ];
