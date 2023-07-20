@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Loader, PdfExams } from "~/components";
+import { Button, Loader } from "~/components";
 import Image from "next/image";
-import { type Result, Subjects } from "~/types/types";
+// import { type Result, Subjects } from "~/types/types";
 import { api } from "@/utils/api";
-import type { Exam, ExamSeries, Stream, Student } from "@prisma/client";
+import type { ExamSeries, Stream } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 function Exams() {
@@ -207,15 +207,6 @@ function Exams() {
 
 export default Exams;
 
-function convertToSlug(input: string): string {
-  
-  return input
-    .toLowerCase()
-    .split(" ")
-    .map((word) => word.replace(/^./, (word[0]??"")?.toLowerCase()))
-    .join("-");
-}
-
 function convert(text: string): string {
   // Split the text
   const parts = text.split(" - ");
@@ -225,11 +216,11 @@ function convert(text: string): string {
   const year = parts[1];
   const term = parts[2]?.toLowerCase();
 
-  const slug1 = `${year}-${form}-${term}`;
+  const slug1 = `${year??""}-${form??""}-${term??""}`;
 
   const parts2 = slug1.split(" ");
 
-  const slug = `${parts2[0]}-${parts2[1]}-${parts2[2]}`;
+  const slug = `${parts2[0]??""}-${parts2[1]??""}-${parts2[2]??""}`;
 
   // 2022-form-1-term-2
   // 2022-form-1-term-2

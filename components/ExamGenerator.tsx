@@ -47,7 +47,7 @@ function generateExams() {
       .toLowerCase();
     const results: Result[] = [];
     Subjects.map((subject, index) => {
-      if (result[index + 3] !== "") {
+      if (result[index + 3] && result[index + 3] !== "") {
         const newResult = {
           slug: subject.slug,
           marks: result[index + 3]?.substring(0, 2),

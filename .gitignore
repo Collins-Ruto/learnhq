@@ -10,7 +10,7 @@
 
 /components/NameGenerator.tsx
 /app/page/utils
-/assets/results.ts
+# /assets/results.ts
 
 # database
 /prisma/db.sqlite
