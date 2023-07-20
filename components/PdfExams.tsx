@@ -1,23 +1,26 @@
 "use client";
 
-import { api } from "@/utils/api";
+// import { api } from "@/utils/api";
 import type { Exam, Stream, Student } from "@prisma/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+// import {  useState } from "react";
 import { Subjects, grades } from "~/types/types";
 
 export default function AppComponent({
   exams,
 }: {
-  exams: (Exam & { student: Student & {stream: Stream}})[];
+  exams: (Exam & { student: Student & { stream: Stream } })[];
 }) {
   // initalize JSPDF doc print landscape page
   const doc = new jsPDF("landscape");
 
-  const [printExams, setExams] =
-    useState<(Exam & { student: Student & { stream: Stream } })[]>(exams);
+  // const [printExams, setExams] =
+  //   useState<(Exam & { student: Student & { stream: Stream } })[]>(exams);
+
+  const printExams: (Exam & { student: Student & { stream: Stream } })[] =
+    exams;
   // const { data, isLoading } = api.exam.getAllPrint.useQuery();
 
   // useEffect(() => {
@@ -47,8 +50,7 @@ export default function AppComponent({
         avg += parseInt(result[0]?.marks ?? "0");
         subjectCount += result[0]?.marks ? 1 : 0;
       });
-      
-      
+
       newStd.push(subjectCount.toString());
       newStd.push(std.student.kcpe.toString());
       newStd.push(avg.toString());
@@ -82,7 +84,7 @@ export default function AppComponent({
     const results = filterstd();
 
     results.map((obj) => {
-      grades.map((grade) => { 
+      grades.map((grade) => {
         const mark = parseInt(obj[obj.length - 2] || "0");
         const score = grade.score;
         const points = grade.points;
@@ -91,7 +93,7 @@ export default function AppComponent({
         }
       });
       if (obj.length < 22) {
-        obj.push("X")
+        obj.push("X");
       }
     });
 
@@ -116,7 +118,7 @@ export default function AppComponent({
     return finalResults.filter((obj) => obj[3]);
   };
 
-  console.log(sortedExams())
+  console.log(sortedExams());
 
   // autoTable(doc, {
   //   theme: "plain",

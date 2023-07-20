@@ -43,7 +43,7 @@ function Exams({ params: { id } }: { params: { id: string } }) {
     console.log(error);
   }
 
-  const searchExams = api.exam.searchResults.useQuery(search);
+  const searchExams = api.exam.searchResults.useQuery({search, slug:id});
 
   const searchSubmit = () => {
     console.log("term sc exam", search);
@@ -55,8 +55,9 @@ function Exams({ params: { id } }: { params: { id: string } }) {
 
   return (
     <div className="w-screen md:w-full">
-      <div className="p-4 pt-4 text-2xl font-semibold">
-        <h3>Exam Results</h3>
+      <div className="flex flex-wrap justify-between gap-4 p-4 pt-4 text-2xl font-semibold">
+        <h3>Exam Results for {id}</h3>
+        <h3 className="">Date: { (new Date(exams?.[0]?.examDate ?? "")).toDateString()}</h3>
       </div>
       {isLoading && <Loader />}
       <div className="flex flex-col justify-end gap-4 p-4 py-2 md:flex-row">
@@ -70,7 +71,7 @@ function Exams({ params: { id } }: { params: { id: string } }) {
             value={search}
             type="text"
             className="focus:shadow-outline w-full appearance-none rounded border-[1px] bg-[#F7F6FB] px-3 py-2 leading-tight text-gray-800 shadow focus:outline-none"
-            placeholder="Search student, Name, Term ..."
+            placeholder="Search student, Stream, ADM ..."
           />
         </div>
         <div className="flex justify-between gap-4">
@@ -107,17 +108,19 @@ function Exams({ params: { id } }: { params: { id: string } }) {
               Add
             </Link>
           </div>
-          {exams && <div className=""><PdfExams exams={ exams} /></div>}
+          {data && <div className=""><PdfExams exams={ data} /></div>}
         </div>
       </div>
       <div className="m-4 overflow-auto rounded-xl bg-[#F7F6FB] p-4">
         <table className=" w-full text-justify">
           <thead>
             <tr className="p-4">
-              <th className="p-2">Exam</th>
+              {/* <th className="p-2">Exam</th> */}
+              <th className="p-2">ADM</th>
               <th className="p-2">Student</th>
-              <th className="p-2">Term</th>
-              <th className="p-2">Date</th>
+              {/* <th className="p-2">Term</th> */}
+              {/* <th className="p-2">Date</th> */}
+              <th className="p-2">Stream</th>
               {Subjects.map((subject, index) => (
                 <th className="border-x-2 p-2" key={index}>
                   {subject.slug}
@@ -133,10 +136,12 @@ function Exams({ params: { id } }: { params: { id: string } }) {
                   className={`p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
                   key={index}
                 >
-                  <td className="p-2">{exam.name}</td>
+                  {/* <td className="p-2">{exam.name}</td> */}
+                  <td className="p-2">{exam?.student?.admissionId}</td>
                   <td className="p-2">{exam?.student?.name}</td>
-                  <td className="p-2">{exam?.term}</td>
-                  <td className="p-2">{date.toDateString().slice(3, 15)}</td>
+                  {/* <td className="p-2">{exam?.term}</td> */}
+                  {/* <td className="p-2">{date.toDateString().slice(3, 15)}</td> */}
+                  <td className="p-2">{exam?.student?.stream.name}</td>
                   {Subjects.map((subject, index) => {
                     const resultsObj: Result[] = exam.results as Result[];
                     const myResult = resultsObj.find(

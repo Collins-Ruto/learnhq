@@ -57,7 +57,7 @@ function Exams() {
   return (
     <div className="w-screen md:w-full">
       <div className="p-4 pt-4 text-2xl font-semibold">
-        <h3>Exam Results</h3>
+        <h3>Exam Series Results</h3>
       </div>
       {isLoading && <Loader />}
       <div className="flex flex-col justify-end gap-4 p-4 py-2 md:flex-row">

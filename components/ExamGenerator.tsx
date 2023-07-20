@@ -1,27 +1,27 @@
 "use client";
-import { Result, ExamSeries, Exam } from "@prisma/client";
+import type { Result, ExamSeries, Exam } from "@prisma/client";
 import React from "react";
-import { streams } from "~/assets/names";
+// import { streams } from "~/assets/names";
 import {
   allStudents,
   examSeriesIds,
   periods,
   results,
   student_ids,
-  students,
+  // students,
 } from "~/assets/results";
 import { Subjects } from "~/types/types";
 
 function ExamGenerator() {
-  const examSeries = [];
-  streams.map((stream) => {
-    const streamStudents = students.filter(
-      (student) => student.streamId === stream.id
-    );
-    // const streamResults = results.filter((result) => result.streamId === stream.id)
-  });
+  // const examSeries = [];
+  // streams.map((stream) => {
+  //   const streamStudents = students.filter(
+  //     (student) => student.streamId === stream.id
+  //   );
+  //   // const streamResults = results.filter((result) => result.streamId === stream.id)
+  // });
 
-  // generateExamSeries();
+  generateExamSeries();
   generateExams();
 
   return <div>Exam Generation</div>;
@@ -42,7 +42,7 @@ function generateExams() {
       (serie) => serie.stream.id === student?.stream.id
     );
 
-    const slug = `${examSeries?.year}-${examSeries?.form}-${examSeries?.term}`
+    const slug = `${examSeries?.year ?? ""}-${examSeries?.form ?? ""}-${examSeries?.term ?? ""}`
       .replace(/\s/g, "-")
       .toLowerCase();
     const results: Result[] = [];
