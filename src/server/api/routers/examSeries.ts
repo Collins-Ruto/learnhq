@@ -45,7 +45,6 @@ export const examSeriesRouter = createTRPCRouter({
     }),
 
     getById: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-        // if (input === 'all') {
         return ctx.prisma.examSeries.findFirst({
             where: {
                 id: input
@@ -59,7 +58,6 @@ export const examSeriesRouter = createTRPCRouter({
                 }
             }
         });
-        // }
     }),
 
     getByForm: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
@@ -74,7 +72,7 @@ export const examSeriesRouter = createTRPCRouter({
                     include: {
                         student: {
                             include: {
-                                stream:true
+                                stream: true
                             }
                         }
                     }
@@ -155,7 +153,7 @@ export const examSeriesRouter = createTRPCRouter({
                     include: {
                         student: {
                             include: {
-                                stream:true
+                                stream: true
                             }
                         }
                     }

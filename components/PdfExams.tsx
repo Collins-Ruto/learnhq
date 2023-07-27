@@ -124,7 +124,7 @@ export default function AppComponent({
       if (!studentsInStream) return
       studentsInStream.results.sort(
         (a, b) =>
-          parseInt(b[b.length - 2] || "0") - parseInt(a[a.length - 2] || "0")
+          parseInt(b[b.length - 3] || "0") - parseInt(a[a.length - 3] || "0")
       );
       for (let i = 0; i < studentsInStream.results.length; i++) {
         studentsInStream.results[i]?.push((i + 1).toString());
@@ -149,7 +149,7 @@ export default function AppComponent({
 
     results.sort(
       (a, b) =>
-        parseInt(b[b.length - 3] || "0") - parseInt(a[a.length - 3] || "0")
+        parseInt(b[b.length - 4] || "0") - parseInt(a[a.length - 4] || "0")
     );
 
     const finalResults: [string[]] = [[]];
@@ -192,7 +192,7 @@ export default function AppComponent({
     body: [
       [
         {
-          content: "Form 3 - 2023 Mid Term 3",
+          content: exams[0]?.name,
           styles: {
             halign: "center",
             fontSize: 12,

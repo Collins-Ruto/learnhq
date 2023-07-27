@@ -12,12 +12,16 @@ export const examRouter = createTRPCRouter({
   getAll: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
     return ctx.prisma.exam.findMany({
       include: {
-        student: true
+        student: {
+          include: {
+            stream: true
+          }
+        }
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'asc'
       },
-      take: 15,
+      take: 55,
       skip: input,
     });
   }),

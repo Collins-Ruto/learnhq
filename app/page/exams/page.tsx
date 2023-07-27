@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Loader } from "~/components";
+import { Button, Loader, PdfExams } from "~/components";
 import Image from "next/image";
 import { type Result, Subjects } from "~/types/types";
 import { api } from "@/utils/api";
@@ -19,11 +19,13 @@ function Exams() {
   const [exams, setExams] = useState<(Exam & { student: Student })[]>();
   const { data, isLoading, error } = api.exam.getAll.useQuery(pagesCount);
   const { data: count } = api.exam.count.useQuery();
+  // const { data: al } = api.exam.count.useQuery();
 
   useEffect(() => {
     if (data) {
       setExams(data);
     }
+    console.log(count, pagesCount)
     if (count && count > 15) {
       setPages((pages) => ({
         ...pages,
@@ -31,7 +33,7 @@ function Exams() {
       }));
       setPages((pages) => ({
         ...pages,
-        hasPreviousPage: pagesCount + 15 > count,
+        hasPreviousPage: pagesCount - 15 >= 0,
       }));
     }
   }, [count, data, pagesCount]);
@@ -104,9 +106,12 @@ function Exams() {
               Add
             </Link>
           </div>
-          <div className="">
-            {/* <PdfExams /> */}
-          </div>
+          {data && (
+            <div className="">
+              <PdfExams exams={data} />
+            </div>
+          )}
+          <div className="">{/* <PdfExams /> */}</div>
         </div>
       </div>
       <div className="m-4 overflow-auto rounded-xl bg-[#F7F6FB] p-4">
@@ -126,7 +131,7 @@ function Exams() {
           </thead>
           <tbody>
             {exams?.map((exam, index) => {
-              const date = new Date(exam.createdAt)
+              const date = new Date(exam.createdAt);
               return (
                 <tr
                   className={`p-4 text-sm ${index % 2 === 0 ? "bg-white" : ""}`}
@@ -135,7 +140,7 @@ function Exams() {
                   <td className="p-2">{exam.name}</td>
                   <td className="p-2">{exam?.student?.name}</td>
                   <td className="p-2">{exam?.term}</td>
-                  <td className="p-2">{date.toDateString().slice(3,15)}</td>
+                  <td className="p-2">{date.toDateString().slice(3, 15)}</td>
                   {Subjects.map((subject, index) => {
                     const resultsObj: Result[] = exam.results as Result[];
                     const myResult = resultsObj.find(
@@ -155,7 +160,7 @@ function Exams() {
         <div className="flex justify-center pb-10 pt-2 align-middle md:pb-0">
           <div
             onClick={() => {
-              setPagesCount(pagesCount - 10);
+              setPagesCount(pagesCount - 15);
             }}
             className={` ${
               pages.hasPreviousPage
@@ -180,7 +185,7 @@ function Exams() {
           </div>
           <div
             onClick={() => {
-              setPagesCount(pagesCount + 10);
+              setPagesCount(pagesCount + 15);
             }}
             className={` ${
               pages.hasNextPage
